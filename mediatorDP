@@ -1,0 +1,81 @@
+import java.util.ArrayList;
+import java.util.List;
+
+interface Zoom {
+    void addCaller(Caller caller);
+    void muteAll();
+    void dismuteAll();
+}
+
+class Caller {
+    private String name;
+    private Zoom zoomCall;
+
+    public Caller(String name, Zoom zoomCall) {
+        this.name = name;
+        this.zoomCall = zoomCall;
+        zoomCall.addCaller(this);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void mute() {
+        System.out.println(name + " is muted");
+    }
+
+    public void dismute() {
+        System.out.println(name + " is unmuted");
+    }
+
+    public void startScreenShare() {
+        System.out.println(name + " started screen share");
+    }
+
+    public void stopScreenShare() {
+        System.out.println(name + " stopped screen share");
+    }
+}
+
+class ZoomImplementation implements Zoom {
+    private List<Caller> callerList;
+
+    public ZoomImplementation() {
+        this.callerList = new ArrayList<>();
+    }
+
+    @Override
+    public void addCaller(Caller caller) {
+        callerList.add(caller);
+    }
+
+    @Override
+    public void muteAll() {
+        for (Caller caller : callerList) {
+            caller.mute();
+        }
+    }
+
+    @Override
+    public void dismuteAll() {
+        for (Caller caller : callerList) {
+            caller.dismute();
+        }
+    }
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Zoom zoomCall = new ZoomImplementation();
+
+        Caller anya = new Caller("Anya", zoomCall);
+        Caller katya = new Caller("Katya", zoomCall);
+        Caller lera = new Caller("Lera", zoomCall);
+
+        anya.startScreenShare();
+        katya.mute();
+        lera.dismute();
+    }
+}
